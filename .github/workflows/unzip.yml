@@ -1,0 +1,29 @@
+name: Unzip canarydata
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unzip and stage files
+        run: |
+          set -eux
+          test -f canarydata.zip
+          unzip -o canarydata.zip
+          cp canarydata/.github/workflows/ci.yml ./ci.yml.staged
+          rm canarydata/.github/workflows/ci.yml
+          cp -a canarydata/. ./
+          rm -rf canarydata canarydata.zip
+          find . -type f | sort
+      - name: Commit extracted files
+        run: |
+          set -eux
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git status --short
+          git commit -m "Upload canarydata product files (CI workflow staged separately)" || echo "nothing to commit"
+          git push
