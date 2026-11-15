@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "canarydata"
+version = "0.1.0"
+description = "Data-leak attribution with per-recipient canary records: seed unique fake customer rows into each export and identify which recipient's copy leaked."
+readme = "README.md"
+license = { text = "GPL-3.0-or-later" }
+authors = [{ name = "Tahir Younas" }]
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+canarydata = "canarydata.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
